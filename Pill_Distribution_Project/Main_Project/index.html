@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medicine Dose Scheduler</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Medicine Dose Scheduler</h1>
+
+      <form id="doseForm">
+        <label for="patientName">Patient Name:</label>
+        <input type="text" id="patientName" required />
+
+        <label for="start">Start Date & Time:</label>
+        <input type="datetime-local" id="start" required />
+
+        <label for="end">End Date:</label>
+        <input type="date" id="end" required />
+
+        <label for="dosage">Dosage (mg):</label>
+        <input type="number" step="0.5" id="dosage" required />
+
+        <label for="interval">Interval (in hours):</label>
+        <select id="interval">
+          <option value="4">Every 4 hours</option>
+          <option value="6">Every 6 hours</option>
+          <option value="8">Every 8 hours</option>
+        </select>
+
+        <button type="submit">Generate Schedule</button>
+      </form>
+
+      <div id="output"></div>
+      <button onclick="confirmPrint()" id="printBtn">Print Schedule</button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
