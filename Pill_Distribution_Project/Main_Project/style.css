@@ -1,6 +1,6 @@
 body {
-  font-family: sans-serif;
-  background-color: #f2f2f2;
+  font-family: "Montserrat", sans-serif;
+  background: linear-gradient(135deg, #852bd9, #3d65dd);
   margin: 0;
   padding: 0;
 }
@@ -9,13 +9,20 @@ body {
   max-width: 800px;
   margin: auto;
   padding: 20px;
-  background: white;
+  background-color: #ccc;
   border-radius: 10px;
   margin-top: 20px;
 }
 
 h1 {
   text-align: center;
+  color: #333;
+}
+
+h2 {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  color: #333;
 }
 
 form {
@@ -25,9 +32,27 @@ form {
 
 label,
 input,
-select,
-button {
+select {
   margin: 10px 0;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 1 rem;
+}
+
+button {
+  padding: 0.5rem;
+  background-color: #ba79d4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease-in-out;
+}
+
+button:hover {
+  background-color: #b236c0;
 }
 
 table {
@@ -38,7 +63,7 @@ table {
 
 th,
 td {
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   padding: 8px;
   text-align: center;
 }
@@ -47,11 +72,15 @@ td {
   margin-top: 20px;
   width: 100%;
   padding: 10px;
-  background: #007bff;
+  background: #1c5fa7;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
+}
+
+#printBtn:hover {
+  background-color: #3d65dd;
 }
 
 @media print {

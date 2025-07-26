@@ -17,10 +17,14 @@ document.getElementById("doseForm").addEventListener("submit", function (e) {
     return;
   }
 
-  // Calculate total days
-  const totalDays = Math.floor((endTime - startTime) / (1000 * 60 * 60 * 24));
+  // Calculate total days (including start and end days)
+  const totalDays =
+    Math.floor((endTime - startTime) / (1000 * 60 * 60 * 24)) + 1;
   const dosesPerDay = 24 / interval;
-  const totalDoses = dosesPerDay * totalDays;
+  const totalDoses = Math.min(
+    Math.ceil(dosesPerDay * totalDays),
+    Math.floor((endTime - startTime) / (interval * 60 * 60 * 1000)) + 1
+  ); // Ensure accurate total
   const totalRequiredMg = totalDoses * dosage;
   const tabletsRequired = Math.ceil(totalRequiredMg / tabletStrengthMg);
 
@@ -40,35 +44,30 @@ document.getElementById("doseForm").addEventListener("submit", function (e) {
       minute: "2-digit",
       hour12: false,
     });
+    const hour = parseInt(doseTime.split(":")[0]);
 
-    const isNight =
-      parseInt(doseTime.split(":")[0]) >= 22 ||
-      parseInt(doseTime.split(":")[0]) < 6;
+    // Adjust night doses to 22:00 if between 22:00 and 06:00
+    let assignTime = doseTime;
+    let assignDate = new Date(doseDate);
+    if (hour >= 22 || hour < 6) {
+      assignTime = "22:00";
+    }
 
-    if (isNight) {
-      const assignDate = new Date(doseDate);
-      if (parseInt(doseTime.split(":")[0]) < 6) {
-        assignDate.setDate(assignDate.getDate() - 1);
-      }
-      const assignTime = "22:00";
-      const dateKey = assignDate.toISOString().split("T")[0];
+    const dateKey = assignDate.toISOString().split("T")[0];
 
-      if (!schedule.has(dateKey)) {
-        schedule.set(dateKey, new Map());
-      }
-      const times = schedule.get(dateKey);
-      times.set(assignTime, (times.get(assignTime) || 0) + 1);
+    if (!schedule.has(dateKey)) {
+      schedule.set(dateKey, new Map());
+    }
+    const times = schedule.get(dateKey);
+    times.set(assignTime, (times.get(assignTime) || 0) + 1);
 
-      actualLastDoseTime = new Date(`${dateKey}T${assignTime}`);
-    } else {
-      const dateKey = doseDate.toISOString().split("T")[0];
-      if (!schedule.has(dateKey)) {
-        schedule.set(dateKey, new Map());
-      }
-      const times = schedule.get(dateKey);
-      times.set(doseTime, (times.get(doseTime) || 0) + 1);
+    actualLastDoseTime = new Date(`${dateKey}T${assignTime}`);
 
-      actualLastDoseTime = new Date(currentDoseTime);
+    // Check if the next increment would exceed endTime, and add the last dose if needed
+    const nextDoseTime = new Date(currentDoseTime);
+    nextDoseTime.setHours(nextDoseTime.getHours() + interval);
+    if (nextDoseTime > endTime && currentDoseTime <= endTime) {
+      break; // Exit after the last valid dose
     }
 
     currentDoseTime.setHours(currentDoseTime.getHours() + interval);
@@ -95,15 +94,15 @@ document.getElementById("doseForm").addEventListener("submit", function (e) {
       </tr>
   `;
 
+  let totalDosesTaken = 0;
   for (const [date, times] of schedule.entries()) {
     for (const [time, count] of times.entries()) {
       const totalDoseMg = count * dosage;
       sumDoseMg += totalDoseMg;
-      balanceMg = totalRequiredMg - sumDoseMg;
-      const usedTabs = sumDoseMg / tabletStrengthMg;
-      balanceTab = tabletsRequired - usedTabs;
-      if (balanceMg < 0) balanceMg = 0;
-      if (balanceTab < 0) balanceTab = 0;
+      balanceMg = Math.max(0, totalRequiredMg - sumDoseMg); // Ensure non-negative balance
+      totalDosesTaken += count;
+      const usedTabs = Math.ceil(sumDoseMg / tabletStrengthMg); // Calculate whole tablets used
+      balanceTab = Math.max(0, tabletsRequired - usedTabs); // Ensure non-negative tablet balance
 
       output += `<tr>
         <td>${new Date(date).toLocaleDateString()}</td>
@@ -120,9 +119,13 @@ document.getElementById("doseForm").addEventListener("submit", function (e) {
 
   if (actualLastDoseTime) {
     output += `<p><strong>Last Dose Date & Time:</strong> ${actualLastDoseTime.toLocaleString()}</p>`;
-    output += `<p><strong>Final Balance:</strong> ${balanceMg.toFixed(
+    // Adjust final balance based on total doses taken
+    const finalUsedTabs = Math.ceil((totalDoses * dosage) / tabletStrengthMg);
+    const finalBalanceMg = Math.max(0, totalRequiredMg - totalDoses * dosage);
+    const finalBalanceTab = Math.max(0, tabletsRequired - finalUsedTabs);
+    output += `<p><strong>Final Balance:</strong> ${finalBalanceMg.toFixed(
       2
-    )} mg and ${balanceTab.toFixed(2)} Tablets</p>`;
+    )} mg and ${finalBalanceTab.toFixed(2)} Tablets</p>`;
   }
 
   document.getElementById("output").innerHTML = output;
