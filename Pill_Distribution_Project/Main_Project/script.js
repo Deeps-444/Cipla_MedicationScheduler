@@ -26,7 +26,7 @@ document.getElementById("doseForm").addEventListener("submit", function (e) {
     Math.floor((endTime - startTime) / (interval * 60 * 60 * 1000)) + 1
   ); // Ensure accurate total
   const totalRequiredMg = totalDoses * dosage;
-  const tabletsRequired = Math.ceil(totalRequiredMg / tabletStrengthMg);
+  const tabletsRequired = totalRequiredMg / tabletStrengthMg;
 
   let sumDoseMg = 0;
   let balanceMg = totalRequiredMg;
