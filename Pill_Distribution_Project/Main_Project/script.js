@@ -101,7 +101,7 @@ document.getElementById("doseForm").addEventListener("submit", function (e) {
       sumDoseMg += totalDoseMg;
       balanceMg = Math.max(0, totalRequiredMg - sumDoseMg); // Ensure non-negative balance
       totalDosesTaken += count;
-      const usedTabs = Math.ceil(sumDoseMg / tabletStrengthMg); // Calculate whole tablets used
+      const usedTabs = sumDoseMg / tabletStrengthMg; // Calculate whole tablets used
       balanceTab = Math.max(0, tabletsRequired - usedTabs); // Ensure non-negative tablet balance
 
       output += `<tr>
