@@ -14,6 +14,12 @@
         <label for="patientName">Patient Name:</label>
         <input type="text" id="patientName" required />
 
+        <label for="patientPin">Patient Pin:</label>
+        <input type="number" id="patientPin" required />
+
+        <label for="wardName">Ward Name:</label>
+        <input type="text" id="wardName" required />
+
         <label for="start">Start Date & Time:</label>
         <input type="datetime-local" id="start" required />
 
@@ -21,7 +27,16 @@
         <input type="date" id="end" required />
 
         <label for="dosage">Dosage (mg):</label>
-        <input type="number" step="0.5" id="dosage" required />
+        <!-- <input type="number" step="0.25" id="dosage" required /> -->
+        <select id="dosage" required>
+          <option value="0.250">0.250 mg</option>
+          <option value="0.500">0.500 mg</option>
+          <option value="0.750">0.750 mg</option>
+          <option value="1.000">1.000 mg</option>
+          <option value="1.250">1.250 mg</option>
+          <option value="1.500">1.500 mg</option>
+          <option value="2.500">2.500 mg</option>
+        </select>
 
         <label for="interval">Interval (in hours):</label>
         <select id="interval">

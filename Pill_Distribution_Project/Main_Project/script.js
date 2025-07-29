@@ -6,7 +6,7 @@ document.getElementById("doseForm").addEventListener("submit", function (e) {
   const endDateOnly = new Date(document.getElementById("end").value);
   const dosage = parseFloat(document.getElementById("dosage").value);
   const interval = parseInt(document.getElementById("interval").value);
-  const tabletStrengthMg = 10;
+  const tabletStrengthMg = 1; // 1mg
 
   // Set end date to 23:59:59 of that day
   const endTime = new Date(endDateOnly);
@@ -82,7 +82,7 @@ document.getElementById("doseForm").addEventListener("submit", function (e) {
     <p><strong>End Date:</strong> ${endDateOnly.toLocaleDateString()}</p>
     <p><strong>Total Doses:</strong> ${totalDoses}</p>
     <p><strong>Total Required (mg):</strong> ${totalRequiredMg}</p>
-    <p><strong>Total Tablets Required (10mg each):</strong> ${tabletsRequired}</p>
+    <p><strong>Total Tablets Required (1mg each):</strong> ${tabletsRequired}</p>
     <table>
       <tr>
         <th>Date</th>
