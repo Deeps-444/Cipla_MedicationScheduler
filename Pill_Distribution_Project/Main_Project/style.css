@@ -83,6 +83,30 @@ td {
   background-color: #3d65dd;
 }
 
+/* skip button extra */
+.skip-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 25px;
+}
+
+.skip-btn.re-add {
+  background-color: #2ecc71;
+}
+
+.skipped-row {
+  text-decoration: line-through;
+  background-color: #f5b7b1;
+  color: #7b241c;
+}
+
 @media print {
   body * {
     visibility: hidden;
@@ -95,5 +119,9 @@ td {
     position: absolute;
     top: 0;
     left: 0;
+  }
+  .skip-btn,
+  th:last-child {
+    visibility: hidden;
   }
 }
